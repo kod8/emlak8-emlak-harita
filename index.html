@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAq9Fv6t6NF_ltj4wucXfwHFqF3GPnn5Mg&amp;sensor=false"></script>
+        <title>Emlak8 Harita</title>
+    </head>
+
+    <body>
+        <div id="map" style="height: 100%; width: 100%;"></div>
+    </body>
+
+    <script>
+        var locations = [
+            { baslik: 'Bondi Beach', altBaslik: "satılık", fiyat: "150000", lat: -33.890542, lon: 151.274856, url: "https://www.emlak8.net" },
+            { baslik: 'Coogee Beach', altBaslik: "kiralık", fiyat: "17000", lat: -33.923036, lon: 151.259052, url: "https://www.emlak8.net" },
+            { baslik: 'Cronulla Beach', altBaslik: "kiralık", fiyat: "2500", lat: -34.028249, lon: 151.157507, url: "https://www.emlak8.net" },
+            { baslik: 'Manly Beach', altBaslik: "satılık", fiyat: "25710", lat: -33.800101, lon: 151.28747, url: "https://www.emlak8.net" },
+            { baslik: 'Maroubra Beach', altBaslik: "satılık", fiyat: "2445", lat: -33.950198, lon: 151.259302, url: "https://www.emlak8.net" }
+        ];
+
+        var center = [locations[0].lat, locations[0].lon];
+        var zoom = 12;
+
+        var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: zoom,
+            center: new google.maps.LatLng(center[0], center[1]),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+        });
+
+        locations.forEach(function (ilan) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(ilan.lat, ilan.lon),
+                map: map,
+                icon: "https://www.emlak8.net/img/emlak8map.png",
+                title: ilan.baslik,
+                className: "marker"
+            });
+
+            google.maps.event.addListener(
+                marker,
+                "click",
+                (function (marker) {
+                    var infowindow = new google.maps.InfoWindow({
+                        content: `
+                            <a class="ilanDetayHarita" href="${ilan.url}" >
+                                <div>
+                                    <span class="baslik">${ilan.baslik}</span>
+                                    <span class="altBaslik">${ilan.altBaslik}</span>
+                                    <span class="fiyat">${ilan.fiyat}&nbsp;TL<span/>
+                                </div>
+                            </a>
+                        `,
+                    });
+                    return function () {
+                        document.querySelectorAll(".gm-style-iw-a").forEach(item => item.querySelector("button[title='Close']").click())
+
+                        infowindow.open(map, marker);
+                        marker.setMap(map);
+                    };
+                })(marker)
+            );
+        });
+
+    </script>
+
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #map>div:nth-child(2) {
+            display: none;
+        }
+
+        img[src="https://www.emlak8.net/img/emlak8map.png"] {
+            filter: drop-shadow(0px 6px 3px white);
+        }
+
+        .ilanDetayHarita {
+            text-decoration: none;
+            font-size: 14px;
+            color: black;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ilanDetayHarita span {
+            display: block;
+        }
+
+        .ilanDetayHarita .baslik {
+            text-decoration: none;
+            font-size: 1.5em;
+            color: #8f2de2;
+            font-weight: 800;
+
+        }
+
+        .ilanDetayHarita .altBaslik {
+            text-decoration: none;
+            font-size: 1em;
+            color: #000;
+            padding: 0.5em 1em;
+            text-align: right;
+        }
+
+        .ilanDetayHarita .fiyat {
+            text-decoration: none;
+            padding: 0.5em 1em;
+            text-align: right;
+            font-size: 1.1em;
+            background-color: #8f2de2;
+            color: #d8f500;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+    </style>
+
+</html>
