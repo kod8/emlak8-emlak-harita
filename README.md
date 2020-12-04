@@ -1,0 +1,1 @@
+# emlak8-emlak-harita
